@@ -1,6 +1,20 @@
 <template>
   <div class="flex h-screen w-screen">
-    <Splitpanes class="no-splitter" :dbl-click-splitter="false" horizontal>
+    <div
+      v-if="currentUser === null"
+      class="flex justify-center items-center grow"
+    >
+      <HoppButtonPrimary
+        :label="t('header.login')"
+        @click="invokeAction('modals.login.toggle')"
+      />
+    </div>
+    <Splitpanes
+      v-else
+      class="no-splitter"
+      :dbl-click-splitter="false"
+      horizontal
+    >
       <Pane style="height: auto">
         <AppHeader />
       </Pane>
@@ -79,7 +93,12 @@ import { RouterView, useRouter } from "vue-router"
 
 import { useI18n } from "~/composables/i18n"
 import { useToast } from "~/composables/toast"
-import { InvocationTriggers, defineActionHandler } from "~/helpers/actions"
+import { useReadonlyStream } from "../composables/stream"
+import {
+  InvocationTriggers,
+  defineActionHandler,
+  invokeAction,
+} from "~/helpers/actions"
 import { hookKeybindingsListener } from "~/helpers/keybindings"
 import { applySetting, toggleSetting } from "~/newstore/settings"
 import { platform } from "~/platform"
@@ -110,6 +129,11 @@ const uiExtensionService = useService(UIExtensionService)
 const rootExtensionComponents = uiExtensionService.rootUIExtensionComponents
 
 const HAS_OPENED_SPOTLIGHT = useSetting("HAS_OPENED_SPOTLIGHT")
+
+const currentUser = useReadonlyStream(
+  platform.auth.getCurrentUserStream(),
+  platform.auth.getCurrentUser()
+)
 
 onBeforeMount(() => {
   if (!mdAndLarger.value) {

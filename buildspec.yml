@@ -5,16 +5,26 @@ phases:
     runtime-versions:
       nodejs: 22
     commands:
-      - echo Installing dependencies...
-      - npm install
+      - echo Installing pnpm...
+      - npm install -g pnpm
+      - echo Installing project dependencies...
+      - pnpm install
+  pre_build:
+    commands:
+      - echo Running lint (optional)...
   build:
     commands:
       - echo Building the project...
-      - npm run build
+      - pnpm build:web   # for web
+      # - pnpm build:desktop  # uncomment if you want desktop build
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
     - '**/*'
-  base-directory: dist
+  base-directory: packages/web/dist  # Change to packages/desktop/dist if needed
+cache:
+  paths:
+    - '~/.pnpm-store/**/*'
+    - 'node_modules/**/*'

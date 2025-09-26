@@ -44,6 +44,7 @@ export default defineConfig({
   build: {
     sourcemap: DISABLE_SOURCEMAP ? false : true,
     emptyOutDir: true,
+    minify: DISABLE_MINIFY ? false : "esbuild",
     rollupOptions: {
       maxParallelFileOps: 2,
     },
@@ -180,41 +181,13 @@ export default defineConfig({
         background_color: APP_INFO.app.background,
         theme_color: APP_INFO.app.background,
         icons: [
-          {
-            src: "/icons/pwa-16x16.png",
-            sizes: "16x16",
-            type: "image/png",
-          },
-          {
-            src: "/icons/pwa-32x32.png",
-            sizes: "32x32",
-            type: "image/png",
-          },
-          {
-            src: "/icons/pwa-128x128.png",
-            sizes: "128x128",
-            type: "image/png",
-          },
-          {
-            src: "/icons/pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "/icons/pwa-256x256.png",
-            sizes: "256x256",
-            type: "image/png",
-          },
-          {
-            src: "/icons/pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-          {
-            src: "/icons/pwa-1024x1024.png",
-            sizes: "1024x1024",
-            type: "image/png",
-          },
+          { src: "/icons/pwa-16x16.png", sizes: "16x16", type: "image/png" },
+          { src: "/icons/pwa-32x32.png", sizes: "32x32", type: "image/png" },
+          { src: "/icons/pwa-128x128.png", sizes: "128x128", type: "image/png" },
+          { src: "/icons/pwa-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "/icons/pwa-256x256.png", sizes: "256x256", type: "image/png" },
+          { src: "/icons/pwa-512x512.png", sizes: "512x512", type: "image/png" },
+          { src: "/icons/pwa-1024x1024.png", sizes: "1024x1024", type: "image/png" },
         ],
       },
       registerType: "prompt",
@@ -240,18 +213,9 @@ export default defineConfig({
     Unfonts({
       fontsource: {
         families: [
-          {
-            name: "Inter Variable",
-            variables: ["variable-full"],
-          },
-          {
-            name: "Material Symbols Rounded Variable",
-            variables: ["variable-full"],
-          },
-          {
-            name: "Roboto Mono Variable",
-            variables: ["variable-full"],
-          },
+          { name: "Inter Variable", variables: ["variable-full"] },
+          { name: "Material Symbols Rounded Variable", variables: ["variable-full"] },
+          { name: "Roboto Mono Variable", variables: ["variable-full"] },
         ],
       },
     }),
@@ -260,10 +224,7 @@ export default defineConfig({
       renderLegacyChunks: false,
     }),
     process.env.HOPP_ALLOW_RUNTIME_ENV
-      ? ImportMetaEnv.vite({
-          example: "../../.env.example",
-          env: "../../.env",
-        })
+      ? ImportMetaEnv.vite({ example: "../../.env.example", env: "../../.env" })
       : [],
   ],
 })

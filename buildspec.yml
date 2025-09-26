@@ -5,25 +5,22 @@ phases:
     runtime-versions:
       nodejs: 22
     commands:
-      - echo Installing pnpm globally...
+      - echo Installing pnpm...
       - npm install -g pnpm
-      - echo Installing project dependencies...
+      - echo Installing dependencies...
       - pnpm install
-
-  pre_build:
-    commands:
-      - echo Checking for buildable packages...
-      - BUILDABLE_PACKAGES=$(find packages -name package.json -exec grep -l '"build"' {} \; | xargs -n1 dirname)
-      - echo "Packages with build scripts: $BUILDABLE_PACKAGES"
 
   build:
     commands:
-      - for pkg in $BUILDABLE_PACKAGES; do
-          echo "Building $pkg...";
-          cd $pkg;
-          pnpm run build;
-          cd -;
-        done
+      - echo Building web client...
+      - cd packages/web
+      - pnpm run build
+      - cd ../..
+
+      - echo Building desktop client...
+      - cd packages/desktop
+      - pnpm run build
+      - cd ../..
 
   post_build:
     commands:
@@ -32,8 +29,7 @@ phases:
 artifacts:
   files:
     - '**/*'
-  # If you only want the build outputs:
-  base-directory: packages/web/dist   # Change to desktop/dist if needed
+  base-directory: packages/web/dist  # Adjust if you want to collect artifacts from both web and desktop clients
 
 cache:
   paths:

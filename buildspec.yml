@@ -1,0 +1,41 @@
+version: 0.2
+
+env:
+  variables:
+    S3_BUCKET: "your-s3-bucket-name"       # Replace with your S3 bucket
+    CLOUDFRONT_DIST_ID: "your-cloudfront-id"  # Replace with your CloudFront distribution ID
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo "Installing pnpm..."
+      - npm install -g pnpm
+      - pnpm -v
+
+  pre_build:
+    commands:
+      - echo "Cloning Hoppscotch repository..."
+      - git clone https://github.com/hoppscotch/hoppscotch.git
+      - cd hoppscotch
+
+  build:
+    commands:
+      - echo "Installing dependencies..."
+      - pnpm install
+      - echo "Building Hoppscotch frontend..."
+      - cd packages/hoppscotch-app
+      - pnpm build
+
+  post_build:
+    commands:
+      - echo "Deploying to S3 bucket $S3_BUCKET..."
+      - aws s3 sync . s3://$S3_BUCKET/ --delete --acl public-read
+      - echo "Invalidating CloudFront cache..."
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DIST_ID --paths "/*"
+
+artifacts:
+  files:
+    - "**/*"
+  base-directory: packages/hoppscotch-app/.next

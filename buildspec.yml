@@ -23,10 +23,17 @@ phases:
       - echo "[install] Installing workspace dependencies"
       - pnpm install --no-frozen-lockfile
 
+  pre_build:
+    commands:
+      - echo "[pre_build] Running GraphQL code generation where available"
+      - pnpm -r --filter "./packages/**" run codegen || true
+
   build:
     commands:
-      - echo "[build] Building all packages/* workspaces with pnpm (excluding examples and desktop)"
-      - pnpm -r --filter "./packages/**" --filter "!**/examples/**" --filter "!**/example/**" --filter "!./packages/hoppscotch-desktop/**" --filter "!./packages/hoppscotch-selfhost-desktop/**" run build
+      - echo "[build] Exporting required env vars for web build"
+      - export VITE_BASE_URL="https://postman.shikhartech.com/"
+      - echo "[build] Building all packages/* workspaces with pnpm (excluding examples and desktop) serialized"
+      - pnpm -r --workspace-concurrency=1 --filter "./packages/**" --filter "!**/examples/**" --filter "!**/example/**" --filter "!./packages/hoppscotch-desktop/**" --filter "!./packages/hoppscotch-selfhost-desktop/**" run build
 
   post_build:
     commands:

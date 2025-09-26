@@ -3,26 +3,18 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 22
+      nodejs: 16
     commands:
-      - echo "Installing pnpm..."
-      - npm install -g pnpm
-      - pnpm -v
-
+      - echo Installing dependencies...
+      - npm install
   build:
     commands:
-      - echo "Cloning your fork..."
-      - git clone https://github.com/shikhartech/postman.git
-      - cd postman/packages/hoppscotch-app
-      - echo "Installing dependencies..."
-      - pnpm install
-      - echo "Building frontend..."
-      - pnpm build
-
+      - echo Building the project...
+      - npm run build
   post_build:
     commands:
-      - echo "Deploying to S3 bucket..."
+      - echo Build completed on `date`
 artifacts:
   files:
-    - "**/*"
-  base-directory: postman/packages/hoppscotch-app/.next
+    - '**/*'
+  base-directory: dist

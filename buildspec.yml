@@ -25,8 +25,8 @@ phases:
 
   build:
     commands:
-      - echo "[build] Building all packages/* workspaces with pnpm"
-      - pnpm -r --filter "./packages/**" run build
+      - echo "[build] Building all packages/* workspaces with pnpm (excluding examples)"
+      - pnpm -r --filter "./packages/**" --filter "!**/examples/**" --filter "!**/example/**" run build
 
   post_build:
     commands:

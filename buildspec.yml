@@ -5,35 +5,55 @@ phases:
     runtime-versions:
       nodejs: 22
     commands:
-      - echo Installing pnpm...
-      - npm install -g pnpm
-      - echo Installing dependencies...
-      - pnpm install
+      - echo "[install] Updating system packages and installing prerequisites (Ubuntu)"
+      - apt-get update -y
+      - DEBIAN_FRONTEND=noninteractive apt-get install -y \
+          build-essential curl git pkg-config cmake patchelf \
+          ca-certificates openssl libssl-dev python3 \
+          libx11-dev libxkbfile-dev libsecret-1-0 libsecret-1-dev \
+          libxrandr-dev libxss1 libxtst6 libgtk-3-dev \
+          libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev
+      - echo "[install] Installing pnpm globally"
+      - npm install -g pnpm@8.15.5
+      - pnpm -v
+      - echo "[install] Installing Rust toolchain via rustup (required for desktop/tauri)"
+      - curl -fsSL https://sh.rustup.rs -o rustup.sh
+      - sh rustup.sh -y
+      - export CARGO_HOME="$HOME/.cargo"
+      - export RUSTUP_HOME="$HOME/.rustup"
+      - export PATH="$CARGO_HOME/bin:$PATH"
+      - rustc --version || true
+      - echo "[install] Installing workspace dependencies"
+      - pnpm install --frozen-lockfile
 
   build:
     commands:
-      - echo Building selfhost web client...
-      - ls -la
-      - cd packages/hoppscotch-selfhost-web
-      - ls -la
-      - pnpm run build
-      - cd ../..
-
-      - echo Building desktop client...
-      - cd hoppscotch-selfhost-desktop
-      - pnpm run build
-      - cd ../..
+      - echo "[build] Building all packages/* workspaces with pnpm"
+      - pnpm -r --filter "./packages/**" run build
 
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo "Build completed on $(date)"
 
 artifacts:
   files:
-    - '**/*'
-  base-directory: packages/web/dist  # Adjust if you want to collect artifacts from both web and desktop clients
+    - packages/**/dist/**/*
+    - packages/**/build/**/*
+    - packages/**/out/**/*
+    - packages/**/.next/**/*
+    - packages/**/src-tauri/target/**/*
+    - packages/**/webapp-server/target/**/*
+    - packages/**/plugin-workspace/target/**/*
+    - packages/**/public/**/*
+    - package.json
+    - pnpm-workspace.yaml
+    - pnpm-lock.yaml
 
 cache:
   paths:
     - '~/.pnpm-store/**/*'
     - 'node_modules/**/*'
+    - 'packages/**/node_modules/**/*'
+    - '~/.cargo/registry/index/**/*'
+    - '~/.cargo/registry/cache/**/*'
+    - '~/.cargo/git/db/**/*'

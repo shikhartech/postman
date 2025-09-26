@@ -12,8 +12,10 @@ phases:
 
   build:
     commands:
-      - echo Building web client...
-      - cd hoppscotch-selfhost-web
+      - echo Building selfhost web client...
+      - ls -la
+      - cd packages/hoppscotch-selfhost-web
+      - ls -la
       - pnpm run build
       - cd ../..
 

@@ -42,7 +42,7 @@ export default defineConfig({
   },
   publicDir: path.resolve(__dirname, "../hoppscotch-common/public"),
   build: {
-    sourcemap: true,
+    sourcemap: DISABLE_SOURCEMAP ? false : true,
     emptyOutDir: true,
     rollupOptions: {
       maxParallelFileOps: 2,

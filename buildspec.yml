@@ -5,25 +5,36 @@ phases:
     runtime-versions:
       nodejs: 22
     commands:
-      - echo Installing pnpm...
+      - echo Installing pnpm globally...
       - npm install -g pnpm
       - echo Installing project dependencies...
       - pnpm install
+
   pre_build:
     commands:
-      - echo Running lint 
+      - echo Checking for buildable packages...
+      - BUILDABLE_PACKAGES=$(find packages -name package.json -exec grep -l '"build"' {} \; | xargs -n1 dirname)
+      - echo "Packages with build scripts: $BUILDABLE_PACKAGES"
+
   build:
     commands:
-      - echo Building the project...
-      - vite build   # for web
-      # - pnpm build:desktop  # uncomment if you want desktop build
+      - for pkg in $BUILDABLE_PACKAGES; do
+          echo "Building $pkg...";
+          cd $pkg;
+          pnpm run build;
+          cd -;
+        done
+
   post_build:
     commands:
       - echo Build completed on `date`
+
 artifacts:
   files:
     - '**/*'
-  base-directory: packages/web/dist  # Change to packages/desktop/dist if needed
+  # If you only want the build outputs:
+  base-directory: packages/web/dist   # Change to desktop/dist if needed
+
 cache:
   paths:
     - '~/.pnpm-store/**/*'

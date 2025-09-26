@@ -18,7 +18,7 @@ import Unfonts from "unplugin-fonts/vite"
 import legacy from "@vitejs/plugin-legacy"
 import ImportMetaEnv from "@import-meta-env/unplugin"
 
-const ENV = loadEnv("development", path.resolve(__dirname, "../../"), ["VITE_"])
+//const ENV = loadEnv("development", path.resolve(__dirname, "../../"), ["VITE_"])
 // Use production env by default for build to reduce plugin overhead
 const MODE = process.env.NODE_ENV ?? "production"
 const ENV = loadEnv(MODE, path.resolve(__dirname, "../../"), ["VITE_"])

@@ -10,9 +10,6 @@ phases:
       - apt-get install -y software-properties-common
       - add-apt-repository -y universe || true
       - apt-get update -y
-      - echo "[install] Creating 4G swap to avoid OOM during builds"
-      - (fallocate -l 4G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=4096)
-      - chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
       - echo "[install] Installing pnpm globally"
       - npm install -g pnpm@8.15.5
       - pnpm -v

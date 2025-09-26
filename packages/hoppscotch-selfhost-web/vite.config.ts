@@ -19,6 +19,11 @@ import legacy from "@vitejs/plugin-legacy"
 import ImportMetaEnv from "@import-meta-env/unplugin"
 
 const ENV = loadEnv("development", path.resolve(__dirname, "../../"), ["VITE_"])
+// Use production env by default for build to reduce plugin overhead
+const MODE = process.env.NODE_ENV ?? "production"
+const ENV = loadEnv(MODE, path.resolve(__dirname, "../../"), ["VITE_"])
+const DISABLE_PWA = process.env.HOPP_DISABLE_PWA === "true"
+const DISABLE_SOURCEMAP = process.env.HOPP_DISABLE_SOURCEMAP === "true"
 
 export default defineConfig({
   envPrefix: process.env.HOPP_ALLOW_RUNTIME_ENV ? "VITE_BUILDTIME_" : "VITE_",
@@ -154,6 +159,7 @@ export default defineConfig({
       },
     }),
     VitePWA({
+      disable: DISABLE_PWA,
       useCredentials: true,
       manifest: {
         name: APP_INFO.name,

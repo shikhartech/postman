@@ -10,6 +10,9 @@ phases:
       - apt-get install -y software-properties-common
       - add-apt-repository -y universe || true
       - apt-get update -y
+      - echo "[install] Creating 4G swap to avoid OOM during builds"
+      - (fallocate -l 4G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=4096)
+      - chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
       - echo "[install] Installing pnpm globally"
       - npm install -g pnpm@8.15.5
       - pnpm -v
@@ -32,6 +35,7 @@ phases:
     commands:
       - echo "[build] Exporting required env vars for web build"
       - export VITE_BASE_URL="https://postman.shikhartech.com/"
+      - export NODE_OPTIONS="--max_old_space_size=8192"
       - echo "[build] Building all packages/* workspaces with pnpm (excluding examples and desktop) serialized"
       - pnpm -r --workspace-concurrency=1 --filter "./packages/**" --filter "!**/examples/**" --filter "!**/example/**" --filter "!./packages/hoppscotch-desktop/**" --filter "!./packages/hoppscotch-selfhost-desktop/**" run build
 

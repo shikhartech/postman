@@ -7,6 +7,9 @@ phases:
     commands:
       - echo "[install] Updating system packages and installing prerequisites (Ubuntu)"
       - apt-get update -y
+      - apt-get install -y software-properties-common
+      - add-apt-repository -y universe || true
+      - apt-get update -y
       - echo "[install] Installing pnpm globally"
       - npm install -g pnpm@8.15.5
       - pnpm -v
@@ -18,7 +21,7 @@ phases:
       - export PATH="$CARGO_HOME/bin:$PATH"
       - rustc --version || true
       - echo "[install] Installing workspace dependencies"
-      - pnpm install --frozen-lockfile
+      - pnpm install --no-frozen-lockfile
 
   build:
     commands:

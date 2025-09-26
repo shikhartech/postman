@@ -15,7 +15,7 @@ phases:
   build:
     commands:
       - echo Building the project...
-      - pnpm build:web   # for web
+      - npm run build   # for web
       # - pnpm build:desktop  # uncomment if you want desktop build
   post_build:
     commands:

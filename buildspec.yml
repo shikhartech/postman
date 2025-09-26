@@ -9,23 +9,20 @@ phases:
       - npm install -g pnpm
       - pnpm -v
 
-  pre_build:
-    commands:
-      - echo "Cloning Hoppscotch repository..."
-
   build:
     commands:
+      - echo "Cloning your fork..."
+      - git clone https://github.com/shikhartech/postman.git
+      - cd postman/packages/hoppscotch-app
       - echo "Installing dependencies..."
       - pnpm install
-      - echo "Building Hoppscotch frontend..."
-      - cd packages/hoppscotch-app
+      - echo "Building frontend..."
       - pnpm build
 
   post_build:
     commands:
-      - echo "Deploying to ..."
-
+      - echo "Deploying to S3 bucket..."
 artifacts:
   files:
     - "**/*"
-  base-directory: packages/hoppscotch-app/.next
+  base-directory: postman/packages/hoppscotch-app/.next

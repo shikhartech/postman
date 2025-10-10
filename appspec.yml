@@ -15,10 +15,26 @@ permissions:
 
 hooks:
   BeforeInstall:
-    - location: /bin/true
+    - location: /bin/echo
+      timeout: 30
+      runas: root
+      args:
+        - "Before Install"
   AfterInstall:
-    - location: /bin/true
+    - location: /bin/echo
+      timeout: 30
+      runas: root
+      args:
+        - "After Install"
   ApplicationStart:
-    - location: /bin/true
+    - location: /bin/echo
+      timeout: 30
+      runas: root
+      args:
+        - "Application Start"
   ValidateService:
-    - location: /bin/true
+    - location: /bin/echo
+      timeout: 30
+      runas: root
+      args:
+        - "Validate Service"

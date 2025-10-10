@@ -2,8 +2,8 @@ version: 0.0
 os: linux
 
 files:
-  - source: packages/hoppscotch-selfhost-web/dist/
-    destination: /var/www/hoppscotch/
+  - source: /
+    destination: /var/www/html/hoppscotch/
 file_exists_behavior: OVERWRITE
 
 permissions:
@@ -12,29 +12,3 @@ permissions:
     owner: ubuntu
     group: ubuntu
     mode: 755
-
-hooks:
-  BeforeInstall:
-    - location: /bin/echo
-      timeout: 30
-      runas: ubuntu
-      args:
-        - "Before Install"
-  AfterInstall:
-    - location: /bin/echo
-      timeout: 30
-      runas: ubuntu
-      args:
-        - "After Install"
-  ApplicationStart:
-    - location: /bin/echo
-      timeout: 30
-      runas: ubuntu
-      args:
-        - "Application Start"
-  ValidateService:
-    - location: /bin/echo
-      timeout: 30
-      runas: ubuntu
-      args:
-        - "Validate Service"

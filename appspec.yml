@@ -17,24 +17,24 @@ hooks:
   BeforeInstall:
     - location: /bin/echo
       timeout: 30
-      runas: root
+      runas: ubuntu
       args:
         - "Before Install"
   AfterInstall:
     - location: /bin/echo
       timeout: 30
-      runas: root
+      runas: ubuntu
       args:
         - "After Install"
   ApplicationStart:
     - location: /bin/echo
       timeout: 30
-      runas: root
+      runas: ubuntu
       args:
         - "Application Start"
   ValidateService:
     - location: /bin/echo
       timeout: 30
-      runas: root
+      runas: ubuntu
       args:
         - "Validate Service"

@@ -1,8 +1,10 @@
 version: 0.0
 os: linux
+
 files:
   - source: packages/hoppscotch-selfhost-web/dist/
     destination: /var/www/hoppscotch/
+file_exists_behavior: OVERWRITE
 
 permissions:
   - object: /var/www/hoppscotch
@@ -10,3 +12,13 @@ permissions:
     owner: ubuntu
     group: ubuntu
     mode: 755
+
+hooks:
+  BeforeInstall:
+    - location: /bin/true
+  AfterInstall:
+    - location: /bin/true
+  ApplicationStart:
+    - location: /bin/true
+  ValidateService:
+    - location: /bin/true

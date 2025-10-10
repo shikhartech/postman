@@ -24,6 +24,7 @@ const MODE = process.env.NODE_ENV ?? "production"
 const ENV = loadEnv(MODE, path.resolve(__dirname, "../../"), ["VITE_"])
 const DISABLE_PWA = process.env.HOPP_DISABLE_PWA === "true"
 const DISABLE_SOURCEMAP = process.env.HOPP_DISABLE_SOURCEMAP === "true"
+const DISABLE_MINIFY = process.env.HOPP_DISABLE_MINIFY === "true"
 
 export default defineConfig({
   envPrefix: process.env.HOPP_ALLOW_RUNTIME_ENV ? "VITE_BUILDTIME_" : "VITE_",

@@ -1,0 +1,12 @@
+version: 0.0
+os: linux
+files:
+  - source: packages/hoppscotch-selfhost-web/dist/
+    destination: /var/www/hoppscotch/
+
+permissions:
+  - object: /var/www/hoppscotch
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
